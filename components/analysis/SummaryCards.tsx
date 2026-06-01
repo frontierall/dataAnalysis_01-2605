@@ -29,9 +29,9 @@ export default function SummaryCards({ summary }: Props) {
         sub={`전체 셀의 ${(missingRatio * 100).toFixed(1)}%`}
       />
       <Card
-        label="완전한 행 비율"
+        label="데이터 충족률"
         value={`${((1 - missingRatio) * 100).toFixed(1)}%`}
-        sub="결측치 없는 셀 비율"
+        sub="전체 셀 중 값이 있는 비율"
       />
     </div>
   );

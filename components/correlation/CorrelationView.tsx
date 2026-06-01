@@ -132,8 +132,15 @@ export default function CorrelationView() {
     setComputed(false);
   };
 
-  const selectAll = () => {
-    setSelectedCols(new Set());
+  const allSelected =
+    selectedCols.size === 0 || selectedCols.size === numericCols.length;
+
+  const toggleAll = () => {
+    if (allSelected) {
+      setSelectedCols(new Set());
+    } else {
+      setSelectedCols(new Set(numericCols));
+    }
     setComputed(false);
   };
 
@@ -157,10 +164,10 @@ export default function CorrelationView() {
                 분석할 수치형 컬럼 선택
               </span>
               <button
-                onClick={selectAll}
+                onClick={toggleAll}
                 className="text-xs text-blue-500 hover:underline"
               >
-                전체 선택
+                {allSelected ? "전체 선택" : "전체 해제"}
               </button>
             </div>
             <div className="flex flex-wrap gap-2">

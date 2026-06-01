@@ -71,6 +71,7 @@ export default function DataCleaning() {
     null
   );
   const [applied, setApplied] = useState(false);
+  const [resultMsg, setResultMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   if (!data || !summary) return null;
 
@@ -115,22 +116,23 @@ export default function DataCleaning() {
       fileName: `[정제] ${data.fileName}`,
     };
 
-    setCleanedData(cleaned);
-    setApplied(true);
-
-    const summary = [
+    const parts = [
       removedRows > 0 ? `행 삭제 ${removedRows}개` : null,
       filledCells > 0 ? `결측치 대체 ${filledCells}개` : null,
       outlierRemoved > 0 ? `이상치 행 삭제 ${outlierRemoved}개` : null,
-    ]
-      .filter(Boolean)
-      .join(", ");
+    ].filter(Boolean);
 
-    alert(
-      summary
-        ? `정제 완료: ${summary}\n최종 행 수: ${finalRows.length.toLocaleString()}개`
-        : "처리할 내용이 없습니다. 전략을 선택해 주세요."
-    );
+    if (parts.length === 0) {
+      setResultMsg({ ok: false, text: "처리할 내용이 없습니다. 전략을 선택해 주세요." });
+      return;
+    }
+
+    setCleanedData(cleaned);
+    setApplied(true);
+    setResultMsg({
+      ok: true,
+      text: `정제 완료 — ${parts.join(", ")} / 최종 ${finalRows.length.toLocaleString()}행`,
+    });
   }
 
   function handleDownload() {
@@ -386,6 +388,25 @@ export default function DataCleaning() {
       </section>
 
       {/* ── 3. 적용 & 다운로드 ── */}
+      {resultMsg && (
+        <div
+          className={`flex items-center justify-between px-4 py-3 rounded-lg text-sm border ${
+            resultMsg.ok
+              ? "bg-green-50 border-green-200 text-green-800"
+              : "bg-yellow-50 border-yellow-200 text-yellow-800"
+          }`}
+        >
+          <span>{resultMsg.text}</span>
+          <button
+            onClick={() => setResultMsg(null)}
+            className="ml-4 text-current opacity-50 hover:opacity-100 text-base leading-none"
+            aria-label="닫기"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       <div className="flex flex-wrap gap-3 items-center">
         <button
           onClick={handleApply}
@@ -408,6 +429,7 @@ export default function DataCleaning() {
               setApplied(false);
               setOutlierResults(null);
               setConfigs({});
+              setResultMsg(null);
             }}
             className="px-4 py-2 rounded-lg text-red-500 hover:bg-red-50 text-sm transition-colors"
           >
