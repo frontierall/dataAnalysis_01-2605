@@ -7,7 +7,18 @@ import type { MenuItem } from "@/lib/types";
 const menuItems: MenuItem[] = [
   { id: "upload", label: "파일 업로드", requiresData: false },
   { id: "analysis", label: "기본 데이터 분석", requiresData: true },
+  { id: "cleaning", label: "데이터 정제", requiresData: true },
+  { id: "visualization", label: "시각화", requiresData: true },
+  { id: "correlation", label: "상관관계 분석", requiresData: true },
 ];
+
+const ICONS: Record<string, string> = {
+  upload: "📂",
+  analysis: "📊",
+  cleaning: "🧹",
+  visualization: "📈",
+  correlation: "🔗",
+};
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
@@ -49,7 +60,7 @@ export default function Sidebar() {
               title={collapsed ? item.label : undefined}
             >
               <span className="text-base leading-none shrink-0">
-                {item.id === "upload" ? "📂" : "📊"}
+                {ICONS[item.id] ?? "•"}
               </span>
               {!collapsed && <span>{item.label}</span>}
             </button>

@@ -6,6 +6,9 @@ import FileUpload from "@/components/upload/FileUpload";
 import SummaryCards from "@/components/analysis/SummaryCards";
 import ColumnInfoTable from "@/components/analysis/ColumnInfoTable";
 import DataPreview from "@/components/analysis/DataPreview";
+import DataCleaning from "@/components/cleaning/DataCleaning";
+import VisualizationView from "@/components/visualization/VisualizationView";
+import CorrelationView from "@/components/correlation/CorrelationView";
 import { computeDatasetSummary } from "@/lib/analysis";
 
 function AnalysisView() {
@@ -43,9 +46,10 @@ function AnalysisView() {
 export default function HomePage() {
   const { activeMenu } = useDataStore();
 
-  if (activeMenu === "analysis") {
-    return <AnalysisView />;
-  }
+  if (activeMenu === "analysis") return <AnalysisView />;
+  if (activeMenu === "cleaning") return <DataCleaning />;
+  if (activeMenu === "visualization") return <VisualizationView />;
+  if (activeMenu === "correlation") return <CorrelationView />;
 
   return <FileUpload />;
 }

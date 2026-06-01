@@ -31,3 +31,34 @@ export interface MenuItem {
   icon?: string;
   requiresData: boolean;
 }
+
+// ── Cleaning ──────────────────────────────────────────────────────────────────
+
+export type MissingStrategy = "none" | "drop" | "mean" | "median" | "mode";
+
+export interface ColumnCleanConfig {
+  column: string;
+  missingStrategy: MissingStrategy;
+}
+
+export interface OutlierConfig {
+  method: "iqr" | "zscore";
+  threshold: number;
+  remove: boolean;
+}
+
+export interface OutlierInfo {
+  column: string;
+  count: number;
+  indices: number[];
+  lowerBound: number;
+  upperBound: number;
+}
+
+// ── Correlation ───────────────────────────────────────────────────────────────
+
+export interface CorrelationMatrix {
+  columns: string[];
+  matrix: number[][];
+  sampleCounts: number[][];
+}
