@@ -1,15 +1,24 @@
 "use client";
 
 import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import { useDataStore } from "@/store/dataStore";
 import FileUpload from "@/components/upload/FileUpload";
 import SummaryCards from "@/components/analysis/SummaryCards";
 import ColumnInfoTable from "@/components/analysis/ColumnInfoTable";
 import DataPreview from "@/components/analysis/DataPreview";
 import DataCleaning from "@/components/cleaning/DataCleaning";
-import VisualizationView from "@/components/visualization/VisualizationView";
-import CorrelationView from "@/components/correlation/CorrelationView";
 import { computeDatasetSummary } from "@/lib/analysis";
+
+// recharts는 브라우저 전용이므로 SSR 비활성화
+const VisualizationView = dynamic(
+  () => import("@/components/visualization/VisualizationView"),
+  { ssr: false }
+);
+const CorrelationView = dynamic(
+  () => import("@/components/correlation/CorrelationView"),
+  { ssr: false }
+);
 
 function AnalysisView() {
   const { data } = useDataStore();

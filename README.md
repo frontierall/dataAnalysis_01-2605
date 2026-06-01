@@ -73,8 +73,10 @@ npm run dev        # http://localhost:3000
 │   ├── cleaning.ts     # 결측치 대체·이상치 탐지·CSV 다운로드 함수
 │   └── correlation.ts  # Pearson 상관계수 계산·색상 매핑 함수
 │
-└── store/
-    └── dataStore.ts    # Zustand 전역 상태 (원본·정제 데이터, 활성 메뉴)
+├── store/
+│   └── dataStore.ts    # Zustand 전역 상태 (원본·정제 데이터, 활성 메뉴)
+│
+└── declarations.d.ts   # CSS 모듈 타입 선언 (TypeScript 6 요구사항)
 ```
 
 ---
@@ -142,6 +144,8 @@ const menuItems: MenuItem[] = [
 | 수치형 컬럼 2개 | 산점도 (최대 2,000점 균등 샘플링) |
 
 정제 데이터가 있으면 **원본 / 정제본 토글**로 비교 가능합니다.
+
+> recharts는 브라우저 전용 라이브러리이므로 `app/page.tsx`에서 `dynamic({ ssr: false })`로 임포트합니다.
 
 ### 상관관계 분석
 - 수치형 컬럼 중 분석 대상을 토글 버튼으로 선택 / 전체 해제
