@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useDataStore } from "@/store/dataStore";
 import type { MenuItem } from "@/lib/types";
 
-const menuItems: MenuItem[] = [
+const BASE_MENU_ITEMS: MenuItem[] = [
   { id: "upload", label: "파일 업로드", requiresData: false },
   { id: "analysis", label: "기본 데이터 분석", requiresData: true },
   { id: "cleaning", label: "데이터 정제", requiresData: true },
@@ -12,17 +12,28 @@ const menuItems: MenuItem[] = [
   { id: "correlation", label: "상관관계 분석", requiresData: true },
 ];
 
+const SMALLBIZ_MENU_ITEM: MenuItem = {
+  id: "smallbiz",
+  label: "소상공인 매출 분석",
+  requiresData: true,
+};
+
 const ICONS: Record<string, string> = {
   upload: "📂",
   analysis: "📊",
   cleaning: "🧹",
   visualization: "📈",
   correlation: "🔗",
+  smallbiz: "🏪",
 };
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
-  const { data, activeMenu, setActiveMenu } = useDataStore();
+  const { data, activeMenu, setActiveMenu, isSmallBizData } = useDataStore();
+
+  const menuItems = isSmallBizData
+    ? [BASE_MENU_ITEMS[0], SMALLBIZ_MENU_ITEM, ...BASE_MENU_ITEMS.slice(1)]
+    : BASE_MENU_ITEMS;
 
   return (
     <aside

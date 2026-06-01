@@ -19,6 +19,10 @@ const CorrelationView = dynamic(
   () => import("@/components/correlation/CorrelationView"),
   { ssr: false }
 );
+const SmallBizDashboard = dynamic(
+  () => import("@/components/smallbiz/SmallBizDashboard"),
+  { ssr: false }
+);
 
 function AnalysisView() {
   const { data } = useDataStore();
@@ -55,6 +59,7 @@ function AnalysisView() {
 export default function HomePage() {
   const { activeMenu } = useDataStore();
 
+  if (activeMenu === "smallbiz") return <SmallBizDashboard />;
   if (activeMenu === "analysis") return <AnalysisView />;
   if (activeMenu === "cleaning") return <DataCleaning />;
   if (activeMenu === "visualization") return <VisualizationView />;

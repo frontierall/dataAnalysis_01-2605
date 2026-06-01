@@ -45,14 +45,37 @@ export async function parseXLSX(file: File): Promise<ParsedData> {
   const { read, utils } = await import("xlsx");
   const buffer = await file.arrayBuffer();
   const workbook = read(buffer, { type: "array" });
-  const sheetName = workbook.SheetNames[0];
-  if (!sheetName) throw new Error("XLSX 파일에 시트가 없습니다.");
-  const sheet = workbook.Sheets[sheetName];
-  const rawRows = utils.sheet_to_json<Record<string, unknown>>(sheet, {
+  if (workbook.SheetNames.length === 0)
+    throw new Error("XLSX 파일에 시트가 없습니다.");
+
+  const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+  const firstRaw = utils.sheet_to_json<Record<string, unknown>>(firstSheet, {
     defval: null,
   });
-  if (rawRows.length === 0) throw new Error("데이터가 없습니다.");
-  const columns = Object.keys(rawRows[0]);
+  if (firstRaw.length === 0) throw new Error("데이터가 없습니다.");
+
+  const columns = Object.keys(firstRaw[0]);
+
+  // Merge all sheets when they share the same column structure
+  let allRaw: Record<string, unknown>[] = [];
+  let canMerge = true;
+  for (const sheetName of workbook.SheetNames) {
+    const sheet = workbook.Sheets[sheetName];
+    const rows = utils.sheet_to_json<Record<string, unknown>>(sheet, {
+      defval: null,
+    });
+    if (rows.length === 0) continue;
+    const cols = Object.keys(rows[0]);
+    const same =
+      cols.length === columns.length && cols.every((c, i) => c === columns[i]);
+    if (!same) {
+      canMerge = false;
+      break;
+    }
+    allRaw = allRaw.concat(rows);
+  }
+
+  const rawRows = canMerge ? allRaw : firstRaw;
   const rows = normalizeRows(rawRows, columns);
   return { columns, rows, fileName: file.name, fileSize: file.size };
 }

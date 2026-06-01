@@ -3,9 +3,10 @@
 import { useCallback, useRef, useState } from "react";
 import { useDataStore } from "@/store/dataStore";
 import { parseFile } from "@/lib/parsers";
+import { detectSmallBizData, mapSmallBizColumns } from "@/lib/smallbiz/detector";
 
 export default function FileUpload() {
-  const { setData, setActiveMenu, cleanedData } = useDataStore();
+  const { setData, setActiveMenu, setSmallBizMeta, cleanedData } = useDataStore();
   const [dragging, setDragging] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,14 +21,17 @@ export default function FileUpload() {
       try {
         const parsed = await parseFile(file);
         setData(parsed);
-        setActiveMenu("analysis");
+        const isSmallBiz = detectSmallBizData(parsed.columns);
+        const colMap = isSmallBiz ? mapSmallBizColumns(parsed.columns) : null;
+        setSmallBizMeta(isSmallBiz, colMap);
+        setActiveMenu(isSmallBiz ? "smallbiz" : "analysis");
       } catch (e) {
         setError(e instanceof Error ? e.message : "파일 파싱에 실패했습니다.");
       } finally {
         setLoading(false);
       }
     },
-    [setData, setActiveMenu]
+    [setData, setActiveMenu, setSmallBizMeta]
   );
 
   const handleFile = useCallback(
