@@ -15,14 +15,9 @@ import { useDataStore } from "@/store/dataStore";
 import { computeDatasetSummary } from "@/lib/analysis";
 import { computeCorrelationMatrix, corrColor } from "@/lib/correlation";
 import { isMissing, toNumber } from "@/lib/cleaning";
+import { sampleArray } from "@/lib/utils";
 
 const SCATTER_SAMPLE = 1500;
-
-function sampleArray<T>(arr: T[], n: number): T[] {
-  if (arr.length <= n) return arr;
-  const step = arr.length / n;
-  return Array.from({ length: n }, (_, i) => arr[Math.floor(i * step)]);
-}
 
 function DataSourceToggle() {
   const { cleanedData, activeDataSource, setActiveDataSource } = useDataStore();

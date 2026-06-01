@@ -9,20 +9,13 @@ import {
   removeOutlierRows,
   downloadAsCSV,
 } from "@/lib/cleaning";
-import type {
-  ColumnCleanConfig,
-  OutlierConfig,
-  OutlierInfo,
-  MissingStrategy,
+import {
+  STRATEGY_LABELS,
+  type ColumnCleanConfig,
+  type OutlierConfig,
+  type OutlierInfo,
+  type MissingStrategy,
 } from "@/lib/types";
-
-const STRATEGY_LABELS: Record<MissingStrategy, string> = {
-  none: "처리 안 함",
-  drop: "행 삭제",
-  mean: "평균값 대체",
-  median: "중앙값 대체",
-  mode: "최빈값 대체",
-};
 
 function DataSourceBadge() {
   const { cleanedData, activeDataSource } = useDataStore();

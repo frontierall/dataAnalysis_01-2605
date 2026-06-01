@@ -36,6 +36,14 @@ export interface MenuItem {
 
 export type MissingStrategy = "none" | "drop" | "mean" | "median" | "mode";
 
+export const STRATEGY_LABELS: Record<MissingStrategy, string> = {
+  none: "처리 안 함",
+  drop: "행 삭제",
+  mean: "평균값 대체",
+  median: "중앙값 대체",
+  mode: "최빈값 대체",
+};
+
 export interface ColumnCleanConfig {
   column: string;
   missingStrategy: MissingStrategy;

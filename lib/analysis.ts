@@ -44,10 +44,6 @@ export function inferColumnType(
   const dateCount = sample.filter(isDateString).length;
   if (dateCount / sample.length >= 0.8) return "datetime";
 
-  // 고유값이 전체의 50% 미만이고 20개 이하이면 범주형으로 판별
-  if (uniqueCount <= 20 || uniqueCount / values.length < 0.5)
-    return "categorical";
-
   return "categorical";
 }
 

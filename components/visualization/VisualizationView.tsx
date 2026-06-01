@@ -18,6 +18,7 @@ import {
 import { useDataStore } from "@/store/dataStore";
 import { computeDatasetSummary } from "@/lib/analysis";
 import { isMissing, toNumber } from "@/lib/cleaning";
+import { sampleArray } from "@/lib/utils";
 import type { ColumnType } from "@/lib/types";
 
 const SCATTER_SAMPLE = 2000;
@@ -69,12 +70,6 @@ function buildLineData(values: unknown[]) {
   return [...freq.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([name, count]) => ({ name, count }));
-}
-
-function sampleArray<T>(arr: T[], n: number): T[] {
-  if (arr.length <= n) return arr;
-  const step = arr.length / n;
-  return Array.from({ length: n }, (_, i) => arr[Math.floor(i * step)]);
 }
 
 // ── sub-components ────────────────────────────────────────────────────────────

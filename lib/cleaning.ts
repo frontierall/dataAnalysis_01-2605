@@ -34,7 +34,8 @@ function mode(values: unknown[]): string {
     }
   }
   if (freq.size === 0) return "";
-  return [...freq.entries()].sort((a, b) => b[1] - a[1])[0][0];
+  return [...freq.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0][0];
 }
 
 function getNumericValues(
