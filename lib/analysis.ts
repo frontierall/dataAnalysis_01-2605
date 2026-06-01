@@ -19,6 +19,12 @@ function isNumericString(val: string): boolean {
   return val.trim() !== "" && !isNaN(Number(val.replace(/,/g, "")));
 }
 
+function distributedSample(arr: string[], n: number): string[] {
+  if (arr.length <= n) return arr;
+  const step = arr.length / n;
+  return Array.from({ length: n }, (_, i) => arr[Math.floor(i * step)]);
+}
+
 /** 컬럼의 비-결측 샘플을 기반으로 타입을 판별합니다. */
 export function inferColumnType(
   values: unknown[],
@@ -30,7 +36,7 @@ export function inferColumnType(
 
   if (nonNull.length === 0) return "unknown";
 
-  const sample = nonNull.slice(0, 200);
+  const sample = distributedSample(nonNull, 200);
 
   const numericCount = sample.filter(isNumericString).length;
   if (numericCount / sample.length >= 0.9) return "numeric";

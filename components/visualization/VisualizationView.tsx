@@ -305,7 +305,11 @@ export default function VisualizationView() {
           <label className="text-xs text-gray-500">컬럼 (X축 / 단일)</label>
           <select
             value={resolvedCol1}
-            onChange={(e) => { setCol1(e.target.value); setCol2(""); }}
+            onChange={(e) => {
+              const next = e.target.value;
+              setCol1(next);
+              if (col2 === next) setCol2("");
+            }}
             className="border border-gray-200 rounded-md px-3 py-1.5 text-sm bg-white text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400"
           >
             {activeData.columns.map((c) => (

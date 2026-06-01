@@ -81,7 +81,10 @@ export default function ColumnInfoTable({ columns }: Props) {
                 }`}
               >
                 <td className="px-4 py-3 text-gray-400 text-xs">{i + 1}</td>
-                <td className="px-4 py-3 font-medium text-gray-900 max-w-[160px] truncate">
+                <td
+                  className="px-4 py-3 font-medium text-gray-900 max-w-[160px] truncate"
+                  title={col.name}
+                >
                   {col.name}
                 </td>
                 <td className="px-4 py-3">
